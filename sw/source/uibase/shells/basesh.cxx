@@ -2154,27 +2154,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     {
         rSh.GetBoxBackground( aBrushItem );
     }
-    else if(nSelType & nsSelectionType::SEL_TXT && rSh.HasSelection())  // text range selected
-    {
-        SfxItemSet aCoreSet(GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END-1);
-
-        rSh.GetCurAttr(aCoreSet);
-
-        // Always use the visible background
-        const SfxPoolItem *pTmpBrush;
-        if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_HIGHLIGHT, true, &pTmpBrush ) )
-        {
-            aBrushItem = *static_cast<const SvxBrushItem*>(pTmpBrush);
-        }
-        if( aBrushItem.GetColor() == COL_TRANSPARENT )
-        {
-            if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, true, &pTmpBrush ) )
-            {
-                aBrushItem = *static_cast<const SvxBrushItem*>(pTmpBrush);
-            }
-        }
-        aBrushItem.SetWhich(RES_BACKGROUND);
-    }
     else
     {
         //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
@@ -2234,10 +2213,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     {
         rSh.GetBoxBackground( aBrushItem );
     }
-    else if(nSelType & nsSelectionType::SEL_TXT && rSh.HasSelection())  // text range selected
-    {
-        // This is really necessary to get the brush item before set it??
-    }
     else
     {
         //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
@@ -2296,17 +2271,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     if( nsSelectionType::SEL_TBL_CELLS & nSelType )
     {
         rSh.SetBoxBackground( aBrushItem );
-    }
-    else if(nSelType & nsSelectionType::SEL_TXT && rSh.HasSelection())  // text range selected
-    {
-        SfxItemSet aCoreSet(GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END-1);
-
-        aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
-        aCoreSet.Put( aBrushItem );
-
-        SvxBrushItem aTransparentBrush( RES_CHRATR_HIGHLIGHT );
-        aCoreSet.Put( aTransparentBrush );
-        rSh.SetAttrSet(aCoreSet);
     }
     else
     {
