@@ -45,8 +45,6 @@
 #include <iostream>
 #endif
 #include <svx/xflclit.hxx>
-#include <unotools/fltrcfg.hxx>
-#include <svl/grabbagitem.hxx>
 
 using namespace ::com::sun::star;
 
