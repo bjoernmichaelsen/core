@@ -114,6 +114,11 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
 
     m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetTimeoutHdl( LINK( this, SwPageBreakWin, FadeHandler ) );
+
+    // FIXME: unwind this by de-coupling SwFrmControl from SwHeaderFooterWin
+    // We will be explicitly lifecycle managed alongside SwFrmControl parent
+    // so we take a reference here which we know will never be released.
+    new VclPtr<SwPageBreakWin>(this);
 }
 
 SwPageBreakWin::~SwPageBreakWin( )

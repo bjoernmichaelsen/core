@@ -165,6 +165,11 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 
     m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetTimeoutHdl( LINK( this, SwHeaderFooterWin, FadeHandler ) );
+
+    // FIXME: unwind this by de-coupling SwFrmControl from SwHeaderFooterWin
+    // We will be explicitly lifecycle managed alongside SwFrmControl parent
+    // so we take a reference here which we know will never be released.
+    new VclPtr<SwHeaderFooterWin>(this);
 }
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
@@ -175,6 +180,7 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 void SwHeaderFooterWin::dispose()
 {
     delete m_pPopupMenu;
+    m_pPopupMenu = NULL;
     m_pLine.disposeAndClear();
     MenuButton::dispose();
 }
